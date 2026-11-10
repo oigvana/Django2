@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Excluir tarefa</title>
+</head>
+<body>
+    <h1>Excluir tarefa</h1>
+    <p>Tem certeza de que deseja excluir a tarefa "{{ tarefa.titulo }}"?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sim, excluir</button>
+        <a href="{% url 'detalhe_tarefa' tarefa.pk %}">Cancelar</a>
+    </form>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ tarefa.titulo }}</title>
+</head>
+<body>
+    <h1>{{ tarefa.titulo }}</h1>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <p><strong>Descrição:</strong> {{ tarefa.descricao|default:"Sem descrição" }}</p>
+    <p>
+        <strong>Prioridade:</strong>
+        {% if tarefa.prioridade == "alta" %}
+            <strong style="color: #c0392b;">{{ tarefa.get_prioridade_display }}</strong>
+        {% else %}
+            {{ tarefa.get_prioridade_display }}
+        {% endif %}
+    </p>
+    <p><strong>Status:</strong> {% if tarefa.concluida %}Concluída{% else %}Pendente{% endif %}</p>
+    <p><strong>Prazo:</strong> {{ tarefa.prazo|date:"d/m/Y"|default:"Sem prazo" }}</p>
+    <p><strong>Criada em:</strong> {{ tarefa.criada_em|date:"d/m/Y H:i" }}</p>
+
+    <form action="{% url 'alternar_tarefa' tarefa.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">
+            {% if tarefa.concluida %}Marcar como pendente{% else %}Marcar como concluída{% endif %}
+        </button>
+    </form>
+
+    <p>
+        <a href="{% url 'editar_tarefa' tarefa.pk %}">Editar</a> |
+        <a href="{% url 'excluir_tarefa' tarefa.pk %}">Excluir</a> |
+        <a href="{% url 'lista_tarefas' %}">Voltar à lista</a>
+    </p>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if tarefa %}Editar tarefa{% else %}Nova tarefa{% endif %}</title>
+</head>
+<body>
+    <h1>{% if tarefa %}Editar tarefa{% else %}Nova tarefa{% endif %}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar</button>
+    </form>
+
+    <p>
+        {% if tarefa %}
+            <a href="{% url 'detalhe_tarefa' tarefa.pk %}">Cancelar</a>
+        {% else %}
+            <a href="{% url 'lista_tarefas' %}">Cancelar</a>
+        {% endif %}
+    </p>
+</body>
+</html>

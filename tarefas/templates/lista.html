@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Minhas Tarefas</title>
+</head>
+<body>
+    <h1>Minhas Tarefas</h1>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <p>
+        Pendentes: <strong>{{ total_pendentes }}</strong> |
+        Concluídas: <strong>{{ total_concluidas }}</strong>
+    </p>
+
+    <p><a href="{% url 'criar_tarefa' %}">+ Nova tarefa</a></p>
+
+    <form method="get">
+        <input type="text" name="q" value="{{ q }}" placeholder="Buscar por título">
+        <input type="hidden" name="status" value="{{ status }}">
+        <button type="submit">Buscar</button>
+        {% if q %}<a href="?status={{ status }}">Limpar busca</a>{% endif %}
+    </form>
+
+    <p>
+        Mostrar:
+        <a href="?status=todas&q={{ q }}">todas</a> |
+        <a href="?status=pendentes&q={{ q }}">pendentes</a> |
+        <a href="?status=concluidas&q={{ q }}">concluídas</a>
+    </p>
+
+    <ul>
+        {% for tarefa in tarefas %}
+            <li>
+                {{ tarefa.titulo }} —
+                {% if tarefa.prioridade == "alta" %}
+                    <strong style="color: #c0392b;">{{ tarefa.get_prioridade_display }}</strong>
+                {% else %}
+                    {{ tarefa.get_prioridade_display }}
+                {% endif %}
+                —
+                {% if tarefa.concluida %}Concluída{% else %}Pendente{% endif %}
+                {% if tarefa.prazo %}— Prazo: {{ tarefa.prazo|date:"d/m/Y" }}{% endif %}
+                <a href="{% url 'detalhe_tarefa' tarefa.pk %}">Detalhes</a>
+                <a href="{% url 'editar_tarefa' tarefa.pk %}">Editar</a>
+                <a href="{% url 'excluir_tarefa' tarefa.pk %}">Excluir</a>
+            </li>
+        {% empty %}
+            <li>Nenhuma tarefa encontrada.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
